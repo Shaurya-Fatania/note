@@ -33,6 +33,9 @@
             width: 100%;
             text-align: left;
             border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         .subject-content {
             display: none;
@@ -51,6 +54,12 @@
         }
         .icon {
             margin-right: 10px;
+        }
+        .toggle-icon {
+            transition: transform 0.3s;
+        }
+        .active .toggle-icon {
+            transform: rotate(90deg);
         }
     </style>
 </head>
@@ -151,7 +160,13 @@
 
                 const subjectHeader = document.createElement('button');
                 subjectHeader.classList.add('subject-header');
-                subjectHeader.innerHTML = `<i class="${icon}"></i> ${subject.replace('_', ' ').toUpperCase()}`;
+
+                // Add a toggle icon to the header
+                const toggleIcon = document.createElement('i');
+                toggleIcon.className = 'toggle-icon fas fa-chevron-right';
+                subjectHeader.appendChild(toggleIcon);
+
+                subjectHeader.innerHTML += `<i class="${icon}"></i> ${subject.replace('_', ' ').toUpperCase()}`;
 
                 const subjectContent = document.createElement('div');
                 subjectContent.classList.add('subject-content');
@@ -168,6 +183,9 @@
 
                 subjectHeader.onclick = () => {
                     subjectContent.classList.toggle('active');
+                    toggleIcon.classList.toggle('fa-chevron-right');
+                    toggleIcon.classList.toggle('fa-chevron-down');
+                    subjectContent.style.display = subjectContent.style.display === 'block' ? 'none' : 'block';
                 };
 
                 subjectDiv.appendChild(subjectHeader);
