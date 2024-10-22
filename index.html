@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Notes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMhK9kEn74nR0sA2nQzG3i/voAKN7ZkF5t4I6" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        #mainContent {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .subject {
+            margin-bottom: 20px;
+        }
+        .subject-header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            border-radius: 5px;
+        }
+        .subject-content {
+            display: none;
+            padding-left: 20px;
+        }
+        .note-item {
+            display: block;
+            padding: 8px;
+            text-decoration: none;
+            color: #333;
+            border-bottom: 1px solid #e0e0e0;
+            transition: background-color 0.3s;
+        }
+        .note-item:hover {
+            background-color: #f1f1f1;
+        }
+        .icon {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="mainContent"></div>
+
+    <script>
+        // Define all chapters data
+        const chaptersData = {
+            science: {
+                icon: 'fas fa-flask',
+                chapters: [
+                    { name: 'Matter in Our Surroundings', link: '#' },
+                    { name: 'Is Matter Around Us Pure', link: '#' },
+                    { name: 'Atoms and Molecules', link: '#' },
+                    { name: 'Structure of the Atom', link: '#' },
+                    { name: 'The Fundamental Unit of Life', link: '#' },
+                    { name: 'Tissues', link: '#' },
+                    { name: 'Motion', link: 'Motion _ Mind Map.pdf' },
+                    { name: 'Force and Laws of Motion', link: 'Force and law of Motion _ Mind Map.pdf' },
+                    { name: 'Gravitation', link: 'Gravitation _ Mind Map.pdf' },
+                    { name: 'Work and Energy', link: 'Work and Energy _ Mind Map.pdf' },
+                    { name: 'Sound', link: 'Sound _ Mind Map.pdf' },
+                    { name: 'Improvement in Food Resources', link: '#' }
+                ]
+            },
+            mathematics: {
+                icon: 'fas fa-square-root-alt',
+                chapters: [
+                    'Number Systems',
+                    'Polynomials',
+                    'Coordinate Geometry',
+                    'Linear Equations in Two Variables',
+                    'Introduction to Euclid Geometry',
+                    'Lines and Angles',
+                    'Triangles',
+                    'Quadrilaterals',
+                    'Circles',
+                    'Herons Formula',
+                    'Surface Areas and Volumes',
+                    'Statistics'
+                ]
+            },
+            social_science: {
+                icon: 'fas fa-globe',
+                chapters: [
+                    'India Size and Location',
+                    'Physical Features of India',
+                    'Drainage',
+                    'Climate',
+                    'Natural Vegetation and Wildlife',
+                    'Population',
+                    'What Is Democracy Why Democracy',
+                    'Constitutional Design',
+                    'Electoral Politics',
+                    'Working of Institutions',
+                    'Democratic Rights',
+                    'The Story of Village Palampur',
+                    'People as Resource',
+                    'Poverty as a Challenge',
+                    'Food Security in India'
+                ]
+            },
+            english: {
+                icon: 'fas fa-book',
+                chapters: [
+                    'The Fun They Had',
+                    'The Sound of Music',
+                    'The Little Girl',
+                    'A Truly Beautiful Mind',
+                    'The Snake and the Mirror',
+                    'My Childhood',
+                    'Reach for the Top',
+                    'Kathmandu',
+                    'If I Were You',
+                    'The Lost Child',
+                    'The Adventures of Toto',
+                    'Iswaran the Storyteller',
+                    'In the Kingdom of Fools',
+                    'The Happy Prince',
+                    'Weathering the Storm in Ersama',
+                    'The Last Leaf',
+                    'A House is not a Home',
+                    'The Beggar'
+                ]
+            }
+        };
+
+        // Function to create HTML for each subject and its chapters
+        function createContent() {
+            const mainContent = document.getElementById('mainContent');
+
+            for (const subject in chaptersData) {
+                const { icon, chapters } = chaptersData[subject];
+
+                const subjectDiv = document.createElement('div');
+                subjectDiv.classList.add('subject');
+
+                const subjectHeader = document.createElement('button');
+                subjectHeader.classList.add('subject-header');
+                subjectHeader.innerHTML = `<i class="${icon}"></i> ${subject.replace('_', ' ').toUpperCase()}`;
+
+                const subjectContent = document.createElement('div');
+                subjectContent.classList.add('subject-content');
+
+                chapters.forEach(chapter => {
+                    const chapterItem = document.createElement('a');
+                    chapterItem.classList.add('note-item');
+                    chapterItem.textContent = chapter.name || chapter; // Use the name for objects, or the string for arrays
+                    chapterItem.href = chapter.link || '#'; // Use the link for objects, or '#' for arrays
+                    chapterItem.target = '_blank'; // Open in a new tab
+                    chapterItem.innerHTML = `<div class="icon"><i class="fas fa-file-alt"></i></div> ${chapter.name || chapter}`;
+                    subjectContent.appendChild(chapterItem);
+                });
+
+                subjectHeader.onclick = () => {
+                    subjectContent.classList.toggle('active');
+                };
+
+                subjectDiv.appendChild(subjectHeader);
+                subjectDiv.appendChild(subjectContent);
+                mainContent.appendChild(subjectDiv);
+            }
+        }
+
+        // Create the content when the document is ready
+        document.addEventListener('DOMContentLoaded', createContent);
+    </script>
+</body>
+</html>
