@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class 9 Notes Hub</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-color: #3b82f6;
+            --hover-color: #2563eb;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            min-height: 100vh;
+        }
+
+        .header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .search-container {
+            position: relative;
+            max-width: 600px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .notes-container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .subject {
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .subject:last-child {
+            border-bottom: none;
+        }
+
+        .subject-header {
+            padding: 1.25rem;
+            width: 100%;
+            text-align: left;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-primary);
+            transition: background-color 0.3s ease;
+        }
+
+        .subject-header:hover {
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+
+        .subject-content {
+            display: none;
+            padding: 0 1.5rem 1.5rem 3rem;
+        }
+
+        .subject-content.active {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .note-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            margin: 0.25rem 0;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .note-item:hover {
+            background-color: rgba(59, 130, 246, 0.05);
+            color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        .icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+        }
+
+        .search-results {
+            display: none;
+            background: white;
+            border-radius: 12px;
+            margin-top: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 1rem;
+        }
+
+        .search-results.active {
+            display: block;
+        }
+
+        .result-item {
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .result-item:hover {
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+
+        .breadcrumb {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 640px) {
+            .header {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.4rem;
+            }
+
+            .container {
+                margin: 1rem auto;
+            }
+
+            .subject-header {
+                font-size: 1.1rem;
+                padding: 1rem;
+            }
+
+            .subject-content {
+                padding: 0 1rem 1rem 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>
+                <i class="fas fa-book-open"></i>
+                Class 9 Notes Hub
+            </h1>
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" placeholder="Search for chapters..." oninput="searchChapters(this.value)">
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div id="searchResults" class="search-results">
+            <!-- Search results will be populated here -->
+        </div>
+
+        <div id="mainContent" class="notes-container">
+            <!-- Content will be dynamically populated by JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        // Define all chapters data
+        const chaptersData = {
+            science: {
+                icon: 'fas fa-flask',
+                chapters: [
+                    'Matter in Our Surroundings',
+                    'Is Matter Around Us Pure',
+                    'Atoms and Molecules',
+                    'Structure of the Atom',
+                    'The Fundamental Unit of Life',
+                    'Tissues',
+                    'Motion',
+                    'Force and Laws of Motion',
+                    'Gravitation',
+                    'Work and Energy',
+                    'Sound',
+                    'Improvement in Food Resources'
+                ]
+            },
+            mathematics: {
+                icon: 'fas fa-square-root-alt',
+                chapters: [
+                    'Number Systems',
+                    'Polynomials',
+                    'Coordinate Geometry',
+                    'Linear Equations in Two Variables',
+                    'Introduction to Euclid Geometry',
+                    'Lines and Angles',
+                    'Triangles',
+                    'Quadrilaterals',
+                    'Circles',
+                    'Herons Formula',
+                    'Surface Areas and Volumes',
+                    'Statistics'
+                ]
+            },
+            social_science: {
+                icon: 'fas fa-globe',
+                chapters: [
+                    'India Size and Location',
+                    'Physical Features of India',
+                    'Drainage',
+                    'Climate',
+                    'Natural Vegetation and Wildlife',
+                    'Population',
+                    'What Is Democracy Why Democracy',
+                    'Constitutional Design',
+                    'Electoral Politics',
+                    'Working of Institutions',
+                    'Democratic Rights',
+                    'The Story of Village Palampur',
+                    'People as Resource',
+                    'Poverty as a Challenge',
+                    'Food Security in India'
+                ]
+            },
+            english: {
+                icon: 'fas fa-book',
+                chapters: [
+                    'The Fun They Had',
+                    'The Sound of Music',
+                    'The Little Girl',
+                    'A Truly Beautiful Mind',
+                    'The Snake and the Mirror',
+                    'My Childhood',
+                    'Reach for the Top',
+                    'Kathmandu',
+                    'If I Were You',
+                    'The Lost Child',
+                    'The Adventures of Toto',
+                    'Iswaran the Storyteller',
+                    'In the Kingdom of Fools',
+                    'The Happy Prince',
+                    'Weathering the Storm in Ersama',
+                    'The Last Leaf',
+                    'A House Is Not a Home',
+                    'The Beggar'
+                ]
+            },
+            hindi: {
+                icon: 'fas fa-book-reader',
+                chapters: [
+                    'कविता: चाँद से थोड़ी सी गप्पें',
+                    'गद्य: "खुशियों का बगीचा"',
+                    'कविता: "अतिथि"'
+                ]
+            }
+        };
+
+        // Function to create the HTML for chapters
+        function createChapterHTML(subject, data) {
+            return `
+                <div class="subject">
+                    <button class="subject-header" onclick="toggleContent('${subject}')">
+                        <i class="${data.icon}"></i>
+                        ${subject.charAt(0).toUpperCase() + subject.slice(1).replace(/_/g, ' ')}
+                    </button>
+                    <div class="subject-content" id="${subject}Content">
+                        ${data.chapters.map(chapter => `
+                            <a href="#" class="note-item">
+                                <div class="icon"><i class="fas fa-file-alt"></i></div>
+                                ${chapter}
+                            </a>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Function to toggle chapter display
+        function toggleContent(subject) {
+            const content = document.getElementById(`${subject}Content`);
+            content.classList.toggle('active');
+        }
+
+        // Function to populate the main content
+        function populateContent() {
+            const mainContent = document.getElementById('mainContent');
+            mainContent.innerHTML = Object.keys(chaptersData).map(subject => createChapterHTML(subject, chaptersData[subject])).join('');
+        }
+
+        // Function to search chapters
+        function searchChapters(query) {
+            const resultsContainer = document.getElementById('searchResults');
+            resultsContainer.innerHTML = ''; // Clear previous results
+            const queryLower = query.toLowerCase();
+
+            if (queryLower) {
+                Object.keys(chaptersData).forEach(subject => {
+                    const chapters = chaptersData[subject].chapters.filter(chapter => chapter.toLowerCase().includes(queryLower));
+                    if (chapters.length > 0) {
+                        resultsContainer.innerHTML += `<div><strong>${subject.charAt(0).toUpperCase() + subject.slice(1).replace(/_/g, ' ')}</strong></div>`;
+                        chapters.forEach(chapter => {
+                            resultsContainer.innerHTML += `<div class="result-item">${chapter}</div>`;
+                        });
+                    }
+                });
+                resultsContainer.classList.add('active');
+            } else {
+                resultsContainer.classList.remove('active');
+            }
+        }
+
+        // Initial population of content
+        populateContent();
+    </script>
+</body>
+</html>
