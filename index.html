@@ -3,68 +3,237 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Study Notes</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMhK9kEn74nR0sA2nQzG3i/voAKN7ZkF5t4I6" crossorigin="anonymous">
+    <title>Class 9 Notes Hub</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        #mainContent {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 8px;
+
+        :root {
+            --primary-color: #3b82f6;
+            --hover-color: #2563eb;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            min-height: 100vh;
+        }
+
+        .header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-        .subject {
-            margin-bottom: 20px;
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
         }
-        .subject-header {
-            background-color: #007bff;
-            color: white;
-            padding: 10px;
-            font-size: 18px;
+
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .search-container {
+            position: relative;
+            max-width: 600px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
             border: none;
-            cursor: pointer;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .notes-container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .subject {
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .subject:last-child {
+            border-bottom: none;
+        }
+
+        .subject-header {
+            padding: 1.25rem;
             width: 100%;
             text-align: left;
-            border-radius: 5px;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            color: var(--text-primary);
+            transition: background-color 0.3s ease;
         }
+
+        .subject-header:hover {
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+
         .subject-content {
             display: none;
-            padding-left: 20px;
+            padding: 0 1.5rem 1.5rem 3rem;
         }
-        .note-item {
+
+        .subject-content.active {
             display: block;
-            padding: 8px;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .note-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            margin: 0.25rem 0;
+            color: var(--text-secondary);
             text-decoration: none;
-            color: #333;
-            border-bottom: 1px solid #e0e0e0;
-            transition: background-color 0.3s;
+            border-radius: 6px;
+            transition: all 0.2s ease;
         }
+
         .note-item:hover {
-            background-color: #f1f1f1;
+            background-color: rgba(59, 130, 246, 0.05);
+            color: var(--primary-color);
+            transform: translateX(5px);
         }
+
         .icon {
-            margin-right: 10px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
         }
-        .toggle-icon {
-            transition: transform 0.3s;
+
+        .search-results {
+            display: none;
+            background: white;
+            border-radius: 12px;
+            margin-top: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 1rem;
         }
-        .active .toggle-icon {
-            transform: rotate(90deg);
+
+        .search-results.active {
+            display: block;
+        }
+
+        .result-item {
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .result-item:hover {
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+
+        .breadcrumb {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 640px) {
+            .header {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.4rem;
+            }
+
+            .container {
+                margin: 1rem auto;
+            }
+
+            .subject-header {
+                font-size: 1.1rem;
+                padding: 1rem;
+            }
+
+            .subject-content {
+                padding: 0 1rem 1rem 2rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div id="mainContent"></div>
+    <header class="header">
+        <div class="header-content">
+            <h1>
+                <i class="fas fa-book-open"></i>
+                Class 9 Notes Hub
+            </h1>
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" placeholder="Search for chapters..." oninput="searchChapters(this.value)">
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div id="searchResults" class="search-results">
+            <!-- Search results will be populated here -->
+        </div>
+
+        <div id="mainContent" class="notes-container">
+            <!-- Content will be dynamically populated by JavaScript -->
+        </div>
+    </div>
 
     <script>
         // Define all chapters data
@@ -72,18 +241,18 @@
             science: {
                 icon: 'fas fa-flask',
                 chapters: [
-                    { name: 'Matter in Our Surroundings', link: '#' },
-                    { name: 'Is Matter Around Us Pure', link: '#' },
-                    { name: 'Atoms and Molecules', link: '#' },
-                    { name: 'Structure of the Atom', link: '#' },
-                    { name: 'The Fundamental Unit of Life', link: '#' },
-                    { name: 'Tissues', link: '#' },
-                    { name: 'Motion', link: 'Motion _ Mind Map.pdf' },
-                    { name: 'Force and Laws of Motion', link: 'Force and law of Motion _ Mind Map.pdf' },
-                    { name: 'Gravitation', link: 'Gravitation _ Mind Map.pdf' },
-                    { name: 'Work and Energy', link: 'Work and Energy _ Mind Map.pdf' },
-                    { name: 'Sound', link: 'Sound _ Mind Map.pdf' },
-                    { name: 'Improvement in Food Resources', link: '#' }
+                    'Matter in Our Surroundings',
+                    'Is Matter Around Us Pure',
+                    'Atoms and Molecules',
+                    'Structure of the Atom',
+                    'The Fundamental Unit of Life',
+                    'Tissues',
+                    'Motion',
+                    'Force and Laws of Motion',
+                    'Gravitation',
+                    'Work and Energy',
+                    'Sound',
+                    'Improvement in Food Resources'
                 ]
             },
             mathematics: {
@@ -142,60 +311,76 @@
                     'The Happy Prince',
                     'Weathering the Storm in Ersama',
                     'The Last Leaf',
-                    'A House is not a Home',
+                    'A House Is Not a Home',
                     'The Beggar'
+                ]
+            },
+            hindi: {
+                icon: 'fas fa-book-reader',
+                chapters: [
+                    'कविता: चाँद से थोड़ी सी गप्पें',
+                    'गद्य: "खुशियों का बगीचा"',
+                    'कविता: "अतिथि"'
                 ]
             }
         };
 
-        // Function to create HTML for each subject and its chapters
-        function createContent() {
+        // Function to create the HTML for chapters
+        function createChapterHTML(subject, data) {
+            return `
+                <div class="subject">
+                    <button class="subject-header" onclick="toggleContent('${subject}')">
+                        <i class="${data.icon}"></i>
+                        ${subject.charAt(0).toUpperCase() + subject.slice(1).replace(/_/g, ' ')}
+                    </button>
+                    <div class="subject-content" id="${subject}Content">
+                        ${data.chapters.map(chapter => `
+                            <a href="#" class="note-item">
+                                <div class="icon"><i class="fas fa-file-alt"></i></div>
+                                ${chapter}
+                            </a>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Function to toggle chapter display
+        function toggleContent(subject) {
+            const content = document.getElementById(`${subject}Content`);
+            content.classList.toggle('active');
+        }
+
+        // Function to populate the main content
+        function populateContent() {
             const mainContent = document.getElementById('mainContent');
+            mainContent.innerHTML = Object.keys(chaptersData).map(subject => createChapterHTML(subject, chaptersData[subject])).join('');
+        }
 
-            for (const subject in chaptersData) {
-                const { icon, chapters } = chaptersData[subject];
+        // Function to search chapters
+        function searchChapters(query) {
+            const resultsContainer = document.getElementById('searchResults');
+            resultsContainer.innerHTML = ''; // Clear previous results
+            const queryLower = query.toLowerCase();
 
-                const subjectDiv = document.createElement('div');
-                subjectDiv.classList.add('subject');
-
-                const subjectHeader = document.createElement('button');
-                subjectHeader.classList.add('subject-header');
-
-                // Add a toggle icon to the header
-                const toggleIcon = document.createElement('i');
-                toggleIcon.className = 'toggle-icon fas fa-chevron-right';
-                subjectHeader.appendChild(toggleIcon);
-
-                subjectHeader.innerHTML += `<i class="${icon}"></i> ${subject.replace('_', ' ').toUpperCase()}`;
-
-                const subjectContent = document.createElement('div');
-                subjectContent.classList.add('subject-content');
-
-                chapters.forEach(chapter => {
-                    const chapterItem = document.createElement('a');
-                    chapterItem.classList.add('note-item');
-                    chapterItem.textContent = chapter.name || chapter; // Use the name for objects, or the string for arrays
-                    chapterItem.href = chapter.link || '#'; // Use the link for objects, or '#' for arrays
-                    chapterItem.target = '_blank'; // Open in a new tab
-                    chapterItem.innerHTML = `<div class="icon"><i class="fas fa-file-alt"></i></div> ${chapter.name || chapter}`;
-                    subjectContent.appendChild(chapterItem);
+            if (queryLower) {
+                Object.keys(chaptersData).forEach(subject => {
+                    const chapters = chaptersData[subject].chapters.filter(chapter => chapter.toLowerCase().includes(queryLower));
+                    if (chapters.length > 0) {
+                        resultsContainer.innerHTML += `<div><strong>${subject.charAt(0).toUpperCase() + subject.slice(1).replace(/_/g, ' ')}</strong></div>`;
+                        chapters.forEach(chapter => {
+                            resultsContainer.innerHTML += `<div class="result-item">${chapter}</div>`;
+                        });
+                    }
                 });
-
-                subjectHeader.onclick = () => {
-                    subjectContent.classList.toggle('active');
-                    toggleIcon.classList.toggle('fa-chevron-right');
-                    toggleIcon.classList.toggle('fa-chevron-down');
-                    subjectContent.style.display = subjectContent.style.display === 'block' ? 'none' : 'block';
-                };
-
-                subjectDiv.appendChild(subjectHeader);
-                subjectDiv.appendChild(subjectContent);
-                mainContent.appendChild(subjectDiv);
+                resultsContainer.classList.add('active');
+            } else {
+                resultsContainer.classList.remove('active');
             }
         }
 
-        // Create the content when the document is ready
-        document.addEventListener('DOMContentLoaded', createContent);
+        // Initial population of content
+        populateContent();
     </script>
 </body>
 </html>
